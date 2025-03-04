@@ -5,7 +5,9 @@ import { APP_DESCRIPTION, APP_NAME, APP_SERVER_URL } from '@/lib/constans';
 import '../assets/styles/glabal.css';
 
 const inter = Inter({
+  weight: ['300', '400', '500'],
   subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

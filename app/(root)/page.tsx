@@ -1,5 +1,3 @@
-import React from 'react';
-// import { Button } from '@/components/ui/button';
-export default function page() {
+export default function Homepage() {
   return <>Click</>;
 }
