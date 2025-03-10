@@ -1,14 +1,11 @@
-import dummyData from '@/db/dummy-data';
+import { getLatestProducts } from '@/lib/actions/product.actions';
 import ProductList from '@/components/shared/product/product-list';
 
-export default function Homepage() {
+export default async function Homepage() {
+  const latestProducts = await getLatestProducts();
   return (
     <>
-      <ProductList
-        data={dummyData.products}
-        title="Featured Products"
-        limit={4}
-      />
+      <ProductList data={latestProducts} title="Featured Products" limit={4} />
     </>
   );
 }
