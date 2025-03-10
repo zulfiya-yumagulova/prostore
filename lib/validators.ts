@@ -1,13 +1,11 @@
 import { z } from 'zod';
-import formatNumberWithDecimal from './utils';
+import { formatNumberWithDecimal } from './utils';
 
 const currency = z
   .string()
-  .refine((value) =>
-    /^\d+(\.\d{2})?$/.test(
-      formatNumberWithDecimal(Number(value)),
-      'Price must have exactly two decimal places'
-    )
+  .refine(
+    (value) => /^\d+(\.\d{2})?$/.test(formatNumberWithDecimal(Number(value))),
+    'Price must have exactly two decimal places'
   );
 
 // Scehma for inserting products
@@ -20,6 +18,6 @@ export const insertProductsSchema = z.object({
   stock: z.coerce.number(),
   images: z.array(z.string()).min(1, 'Product must have at least 1 image'),
   isFeatured: z.boolean(),
-  banner: z.string().nulllable(),
+  banner: z.string().nullable(),
   price: currency,
 });
