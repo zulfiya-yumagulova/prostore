@@ -9,6 +9,7 @@ import { APP_NAME } from '@/lib/constans';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import CredentialsSigInForm from './credentials-signin-form';
 
 export const metadata: Metadata = {
   title: 'Sign In',
@@ -34,7 +35,9 @@ const SignInPage = () => {
             Sign in into ypur account
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">{/* Form here */}</CardContent>
+        <CardContent className="space-y-4">
+          <CredentialsSigInForm />
+        </CardContent>
       </Card>
     </div>
   );
