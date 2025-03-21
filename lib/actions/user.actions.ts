@@ -30,7 +30,7 @@ export async function signInWithCredentials(
 
 // Sign the user out
 export async function signOutUser() {
-  signOut();
+  await signOut();
 }
 
 // Sign Up the user
