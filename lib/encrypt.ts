@@ -1,6 +1,7 @@
 const encoder = new TextEncoder();
 const key = new TextEncoder().encode(process.env.ENCRYPTION_KEY); // Retrieve key from env var
 console.log(process.env.ENCRYPTION_KEY);
+
 // Hash function with key-based encryption
 export const hash = async (plainPassword: string): Promise<string> => {
   const passwordData = encoder.encode(plainPassword);
