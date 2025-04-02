@@ -3,8 +3,10 @@
 import { signInFormSchema, signUpFormSchema } from '../validators';
 import { signIn, signOut } from '@/auth';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
+// import { hash } from '../encrypt';
 import { hashSync } from 'bcrypt-ts-edge';
 import { prisma } from '@/db/prisma';
+import { formatError } from '../utils';
 
 // Sign in the user with credentials
 export async function signInWithCredentials(
@@ -15,25 +17,34 @@ export async function signInWithCredentials(
     const user = signInFormSchema.parse({
       email: formData.get('email'),
       password: formData.get('password'),
+      redirect: false,
     });
+
     await signIn('credentials', user);
 
-    return { success: true, message: 'Signed in succesfully' };
+    return { success: true, message: 'Signed in successfully' };
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
     }
-
-    return { success: false, massage: 'Invalid email or password' };
+    return { success: false, message: 'Invalid email or password' };
   }
 }
 
-// Sign the user out
+// Sign user out
 export async function signOutUser() {
+  // get current users cart and delete it so it does not persist to next user
+  // const currentCart = await getMyCart();
+
+  // if (currentCart?.id) {
+  //   await prisma.cart.delete({ where: { id: currentCart.id } });
+  // } else {
+  //   console.warn('No cart found for deletion.');
+  // }
   await signOut();
 }
 
-// Sign Up the user
+// Sign up user
 export async function signUpUser(prevState: unknown, formData: FormData) {
   try {
     const user = signUpFormSchema.parse({
@@ -45,7 +56,7 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
 
     const plainPassword = user.password;
 
-    user.password = hashSync(user.password, 10);
+    user.password = hashSync(user.password);
 
     await prisma.user.create({
       data: {
@@ -56,19 +67,24 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     });
 
     await signIn('credentials', {
-      name: user.name,
+      email: user.email,
       password: plainPassword,
     });
 
-    return {
-      success: true,
-      message: 'User registered successfully',
-    };
+    return { success: true, message: 'User registered successfully' };
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
     }
-
-    return { success: false, massage: 'User was not registered' };
+    return { success: false, message: formatError(error) };
   }
+}
+
+// Get user by the ID
+export async function getUserById(userId: string) {
+  const user = await prisma.user.findFirst({
+    where: { id: userId },
+  });
+  if (!user) throw new Error('User not found');
+  return user;
 }

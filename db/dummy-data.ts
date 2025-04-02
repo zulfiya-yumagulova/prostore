@@ -1,17 +1,17 @@
-import { hashSync } from 'bcrypt-ts-edge';
+import { hash } from '../lib/encrypt';
 
 const dummyData = {
   users: [
     {
       name: 'John',
       email: 'admin@example.com',
-      password: hashSync('1234567', 10),
+      password: hash('1234567'),
       role: 'admin',
     },
     {
       name: 'Jane',
       email: 'user@example.com',
-      password: hashSync('1234567', 10),
+      password: hash('1234567'),
       role: 'user',
     },
   ],
