@@ -5,7 +5,6 @@ import { useToast } from '@/hooks/use-toast';
 import { CartItem } from '@/types';
 import { Button } from '@/components/ui/button';
 import { ToastAction } from '@radix-ui/react-toast';
-import { Plus } from 'lucide-react';
 import { addItemToCart } from '@/lib/actions/cart.actions';
 
 const AddToCart = ({ item }: { item: CartItem }) => {
@@ -15,17 +14,17 @@ const AddToCart = ({ item }: { item: CartItem }) => {
   const handleAddToCart = async () => {
     const response = await addItemToCart(item);
 
-    if (!response.success) {
+    if (!response || !response.success) {
       toast({
         variant: 'destructive',
-        description: response.message,
+        description: response?.message || 'Failed to add item to cart',
       });
       return;
     }
 
     // Handle success add to the cart
     toast({
-      description: `${item.name} added to the cart`,
+      description: response.message,
       action: (
         <ToastAction
           className="bg-primary text-white hover:bg-gray-800"
@@ -40,7 +39,7 @@ const AddToCart = ({ item }: { item: CartItem }) => {
 
   return (
     <Button className="w-full" type="button" onClick={handleAddToCart}>
-      <Plus /> Add To Cart
+      Add To Cart
     </Button>
   );
 };
