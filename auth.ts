@@ -4,8 +4,8 @@ import { authConfig } from './auth.config';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@/db/prisma';
 import { cookies } from 'next/headers';
-import { compare } from './lib/encrypt';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import { compareSync, hashSync } from 'bcrypt-ts-edge';
 
 export const config = {
   pages: {
@@ -24,8 +24,6 @@ export const config = {
         password: { type: 'password' },
       },
       async authorize(credentials) {
-        console.log(credentials.email, credentials.password, 'credentials ');
-
         if (credentials == null) return null;
 
         // Find user in database
@@ -37,10 +35,14 @@ export const config = {
 
         // Check if user exists and if the password matches
         if (user && user.password) {
-          const isMatch = await compare(
+          const isMatch = compareSync(
             credentials.password as string,
             user.password
           );
+
+          // const plainPassword = user.password;
+
+          user.password = hashSync(user.password, 10);
 
           // If password is correct, return user
           if (isMatch) {
@@ -52,7 +54,7 @@ export const config = {
             };
           }
         }
-        // If user does not exist or password does not match return null
+
         return null;
       },
     }),
@@ -60,29 +62,23 @@ export const config = {
   callbacks: {
     ...authConfig.callbacks,
     async session({ session, user, trigger, token }: any) {
-      // Set the user ID from the token
       session.user.id = token.sub;
       session.user.role = token.role;
       session.user.name = token.name;
 
-      // If there is an update, set the user name
       if (trigger === 'update') {
         session.user.name = user.name;
       }
-
       return session;
     },
     async jwt({ token, user, trigger, session }: any) {
-      // Assign user fields to token
       if (user) {
         token.id = user.id;
         token.role = user.role;
 
-        // If user has no name then use the email
         if (user.name === 'NO_NAME') {
           token.name = user.email!.split('@')[0];
 
-          // Update database to reflect the token name
           await prisma.user.update({
             where: { id: user.id },
             data: { name: token.name },
@@ -99,12 +95,10 @@ export const config = {
             });
 
             if (sessionCart) {
-              // Delete current user cart
               await prisma.cart.deleteMany({
                 where: { userId: user.id },
               });
 
-              // Assign new cart
               await prisma.cart.update({
                 where: { id: sessionCart.id },
                 data: { userId: user.id },
@@ -113,12 +107,9 @@ export const config = {
           }
         }
       }
-
-      // Handle session updates
       if (session?.user.name && trigger === 'update') {
         token.name = session.user.name;
       }
-
       return token;
     },
   },
