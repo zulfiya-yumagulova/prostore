@@ -3,7 +3,6 @@
 import { signInFormSchema, signUpFormSchema } from '../validators';
 import { signIn, signOut } from '@/auth';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
-// import { hash } from '../encrypt';
 import { hashSync } from 'bcrypt-ts-edge';
 import { prisma } from '@/db/prisma';
 import { formatError } from '../utils';
