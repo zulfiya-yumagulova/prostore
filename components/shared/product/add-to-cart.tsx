@@ -17,6 +17,7 @@ const AddToCart = ({ cart, item }: { cart?: Cart; item: CartItem }) => {
   const [isPending, startTransition] = useTransition();
 
   const handleAddToCart = async () => {
+    startTransition(async () => {});
     const response = await addItemToCart(item);
 
     if (!response || !response.success) {
@@ -44,12 +45,14 @@ const AddToCart = ({ cart, item }: { cart?: Cart; item: CartItem }) => {
 
   // Remove the item from  cart
   const handleRemoveFromCart = async () => {
-    const response = await removeItemFromCart(item.productId);
-    toast({
-      variant: response.success ? 'default' : 'destructive',
-      description: response.message,
+    startTransition(async () => {
+      const response = await removeItemFromCart(item.productId);
+      toast({
+        variant: response.success ? 'default' : 'destructive',
+        description: response.message,
+      });
+      return;
     });
-    return;
   };
 
   // Check if item is in the cart
@@ -80,7 +83,7 @@ const AddToCart = ({ cart, item }: { cart?: Cart; item: CartItem }) => {
         <Loader className="w-4 h-4 animate-spin" />
       ) : (
         <Plus className="w-4 h-4" />
-      )}{' '}
+      )}
       Add To Cart
     </Button>
   );
