@@ -6,8 +6,9 @@ import { redirect } from 'next/navigation';
 import ShippingAddressForm from './shippng-addres-form';
 import { ShippingAddress } from '@/types';
 import CheckoutSteps from '@/components/shared/checkout-steps';
+import { Metadata } from 'next';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Shipping Address',
 };
 

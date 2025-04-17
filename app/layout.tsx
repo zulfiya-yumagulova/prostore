@@ -2,11 +2,12 @@ import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { APP_DESCRIPTION, APP_NAME, APP_SERVER_URL } from '@/lib/constans';
 import { Toaster } from '@/components/ui/toaster';
+import { Metadata } from 'next';
 import '../assets/styles/glabal.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: {
     template: `%s | Prostore`,
     default: APP_NAME,
