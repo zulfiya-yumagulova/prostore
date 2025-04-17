@@ -1,13 +1,13 @@
 import { auth } from '@/auth';
 import { getMyCart } from '@/lib/actions/cart.actions';
 import { getUserById } from '@/lib/actions/user.actions';
-import { Metadata } from 'next';
+
 import { redirect } from 'next/navigation';
 import ShippingAddressForm from './shippng-addres-form';
 import { ShippingAddress } from '@/types';
 import CheckoutSteps from '@/components/shared/checkout-steps';
 
-export const metaData: Metadata = {
+export const metadata = {
   title: 'Shipping Address',
 };
 

@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import { APP_DESCRIPTION, APP_NAME, APP_SERVER_URL } from '@/lib/constans';
@@ -7,7 +6,7 @@ import '../assets/styles/glabal.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: {
     template: `%s | Prostore`,
     default: APP_NAME,

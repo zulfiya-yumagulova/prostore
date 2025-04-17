@@ -6,14 +6,14 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { APP_NAME } from '@/lib/constans';
-import { Metadata } from 'next';
+
 import Image from 'next/image';
 import Link from 'next/link';
 import CredentialsSigInForm from './credentials-signin-form';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Sign In',
 };
 
