@@ -191,14 +191,16 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
                 )}
               />
             </div>
-            <Button type="submit" disabled={isPending}>
-              {isPending ? (
-                <Loader className="w-4 h-4 animate-spin" />
-              ) : (
-                <ArrowRight className="w-4 h-4" />
-              )}
-              Continue
-            </Button>
+            <div className="flex gap-2">
+              <Button type="submit" disabled={isPending}>
+                {isPending ? (
+                  <Loader className="w-4 h-4 animate-spin" />
+                ) : (
+                  <ArrowRight className="w-4 h-4" />
+                )}
+                Continue
+              </Button>
+            </div>
           </form>
         </Form>
       </div>
