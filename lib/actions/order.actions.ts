@@ -100,10 +100,11 @@ export async function createOrder() {
 
 // Get order by id
 export async function getOrderById(orderId: string) {
+  console.log('getOrderById', orderId);
   const data = await prisma.order.findFirst({
     where: { id: orderId },
     include: {
-      orderItems: true,
+      OrderItem: true,
       user: {
         select: {
           name: true,
