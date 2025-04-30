@@ -132,7 +132,7 @@ const CartTable = ({ cart }: { cart?: Cart }) => {
                 {isPending ? (
                   <Loader className="w-4 h-4 animate-spin" />
                 ) : (
-                  <ArrowRight w-4 h-4 />
+                  <ArrowRight className="w-4 h-4 " />
                 )}{' '}
                 CONTINUE
               </Button>
