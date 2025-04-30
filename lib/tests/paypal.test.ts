@@ -1,4 +1,4 @@
-import { generateAccessToken } from '../paypal';
+import { generateAccessToken, paypal } from '../paypal';
 
 // Test to generate access token for PayPAl
 describe('PayPal Access Token Generation', () => {
@@ -8,5 +8,21 @@ describe('PayPal Access Token Generation', () => {
     expect(token).toBeDefined();
     expect(typeof token).toBe('string');
     expect(token.length).toBeGreaterThan(0);
+  });
+});
+
+// Test to create PAyPal order
+describe('PayPal Order Creation', () => {
+  it('should create a PayPAl order', async () => {
+    generateAccessToken();
+    const price = 10.0;
+
+    const orderResponse = await paypal.createOrder(price);
+    console.log(`PayPal Order Response: ${JSON.stringify(orderResponse)}`);
+    expect(orderResponse).toBeDefined();
+    expect(orderResponse.id).toBeDefined();
+    expect(orderResponse.status).toBe('CREATED');
+    expect(orderResponse.links).toBeDefined();
+    expect(orderResponse.links.length).toBeGreaterThan(0);
   });
 });
