@@ -26,3 +26,21 @@ describe('PayPal Order Creation', () => {
     expect(orderResponse.links.length).toBeGreaterThan(0);
   });
 });
+
+// Test to capture payments with mock order
+describe('PayPal Order Capture', () => {
+  it('should capture a PayPal order', async () => {
+    const mockOrderId = '100';
+    const mockCapturePayments = jest
+      .spyOn(paypal, 'capturePayment')
+      .mockResolvedValue({
+        status: 'COMPLETED',
+      });
+    const captureResponse = await paypal.capturePayment(mockOrderId);
+
+    console.log(`PayPal Capture Response: ${JSON.stringify(captureResponse)}`);
+    expect(captureResponse).toHaveProperty('status', 'COMPLETED');
+
+    mockCapturePayments.mockRestore();
+  });
+});
