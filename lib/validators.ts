@@ -10,17 +10,22 @@ const currency = z
   );
 
 // Scehma for inserting products
-export const insertProductsSchema = z.object({
+export const insertProductSchema = z.object({
   name: z.string().min(3, 'Name must be at least 3 characters'),
   slug: z.string().min(3, 'Slug must be at least 3 characters'),
   category: z.string().min(3, 'Category must be at least 3 characters'),
-  brand: z.string().min(3, 'brand must be at least 3 characters'),
-  description: z.string().min(3, 'description must be at least 3 characters'),
+  brand: z.string().min(3, 'Brand must be at least 3 characters'),
+  description: z.string().min(3, 'Description must be at least 3 characters'),
   stock: z.coerce.number(),
-  images: z.array(z.string()).min(1, 'Product must have at least 1 image'),
+  images: z.array(z.string()).min(1, 'Product must have at least one image'),
   isFeatured: z.boolean(),
   banner: z.string().nullable(),
   price: currency,
+});
+
+// Schema for updating products
+export const updateProductSchema = insertProductSchema.extend({
+  id: z.string().min(1, 'Id is required'),
 });
 
 // Schema for signing users in
@@ -29,7 +34,7 @@ export const signInFormSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
 });
 
-// Schema for signin up the user
+// Schema for signing up a user
 export const signUpFormSchema = z
   .object({
     name: z.string().min(3, 'Name must be at least 3 characters'),
@@ -44,12 +49,12 @@ export const signUpFormSchema = z
     path: ['confirmPassword'],
   });
 
-// Cart schemas
+// Cart Schemas
 export const cartItemSchema = z.object({
   productId: z.string().min(1, 'Product is required'),
   name: z.string().min(1, 'Name is required'),
   slug: z.string().min(1, 'Slug is required'),
-  qty: z.number().int().nonnegative('Quantity must be a positive'),
+  qty: z.number().int().nonnegative('Quantity must be a positive number'),
   image: z.string().min(1, 'Image is required'),
   price: currency,
 });
@@ -66,20 +71,16 @@ export const insertCartSchema = z.object({
 
 // Schema for the shipping address
 export const shippingAddressSchema = z.object({
-  fullName: z.string().min(3, 'Name must to be at least 3 characters long'),
-  streetAddress: z
-    .string()
-    .min(3, 'Address must to be at least 3 characters long'),
-  city: z.string().min(3, 'City must to be at least 3 characters long'),
-  postCode: z
-    .string()
-    .min(3, 'Post code must to be at least 3 characters long'),
-  country: z.string().min(3, 'Country must to be at least 3 characters long'),
+  fullName: z.string().min(3, 'Name must be at least 3 characters'),
+  streetAddress: z.string().min(3, 'Address must be at least 3 characters'),
+  city: z.string().min(3, 'City must be at least 3 characters'),
+  postCode: z.string().min(3, 'Postal code must be at least 3 characters'),
+  country: z.string().min(3, 'Country must be at least 3 characters'),
   lat: z.number().optional(),
   lng: z.number().optional(),
 });
 
-// Schema for mpayment methods
+// Schema for payment method
 export const paymentMethodsSchema = z
   .object({
     type: z.string().min(1, 'Payment method is required'),
@@ -112,6 +113,7 @@ export const insertOrderItemSchema = z.object({
   qty: z.number(),
 });
 
+// Schema for the PayPal paymentResult
 export const paymentResultSchema = z.object({
   id: z.string(),
   status: z.string(),

@@ -159,9 +159,9 @@ export async function createPayPalOrder(orderId: string) {
 }
 
 // Approve paypal order and update order ro paid in database
-export async function approvePaypalOrder(
+export async function approvePayPalOrder(
   orderId: string,
-  data: { orederId: string }
+  data: { orderID: string }
 ) {
   try {
     // Get order from database
@@ -170,9 +170,10 @@ export async function approvePaypalOrder(
         id: orderId,
       },
     });
+
     if (!order) throw new Error('Order not found');
 
-    const captureData = await paypal.capturePayment(data.orederId);
+    const captureData = await paypal.capturePayment(data.orderID);
 
     if (
       !captureData ||
@@ -182,14 +183,15 @@ export async function approvePaypalOrder(
       throw new Error('Error in PayPal payment');
     }
 
-    // todo Update order to paid
+    // Update order to paid
     await updateOrderToPaid({
       orderId,
       paymentResult: {
         id: captureData.id,
         status: captureData.status,
-        email: captureData.payer.email_address,
-        pricePaid: captureData.purchase_units[0]?.payments?.captures[0]?.value,
+        email_address: captureData.payer.email_address,
+        pricePaid:
+          captureData.purchase_units[0]?.payments?.captures[0]?.amount?.value,
       },
     });
 
@@ -197,8 +199,7 @@ export async function approvePaypalOrder(
 
     return {
       success: true,
-      message: 'Order has been paid successfully',
-      data: captureData,
+      message: 'Your order has been paid',
     };
   } catch (error) {
     return { success: false, message: formatError(error) };
