@@ -110,6 +110,12 @@ export const config = {
       if (session?.user.name && trigger === 'update') {
         token.name = session.user.name;
       }
+
+      // Handle session updates
+      if (session?.user.name && trigger === 'update') {
+        token.name = session.user.name;
+      }
+
       return token;
     },
   },
