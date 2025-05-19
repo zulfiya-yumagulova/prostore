@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Charts from './chart';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
@@ -37,7 +38,7 @@ const AdminOverviewPage = async () => {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Ravenue</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
             <BadgePoundSterling />
           </CardHeader>
           <CardContent>
@@ -87,7 +88,13 @@ const AdminOverviewPage = async () => {
           <CardHeader>
             <CardTitle>Overview</CardTitle>
           </CardHeader>
-          <CardContent>{/* chart here */}</CardContent>
+          <CardContent>
+            <Charts
+              data={{
+                salesData: summary.salesData,
+              }}
+            />
+          </CardContent>
         </Card>
         <Card className="col-span-3">
           <CardHeader>
@@ -97,12 +104,10 @@ const AdminOverviewPage = async () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableRow>
-                    <TableHead>BUYER</TableHead>
-                    <TableHead>DATE</TableHead>
-                    <TableHead>TOTAL</TableHead>
-                    <TableHead>ACTIONS</TableHead>
-                  </TableRow>
+                  <TableHead>BUYER</TableHead>
+                  <TableHead>DATE</TableHead>
+                  <TableHead>TOTAL</TableHead>
+                  <TableHead>ACTIONS</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
