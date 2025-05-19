@@ -74,6 +74,13 @@ export function formatCurrency(amount: number | string | null) {
   }
 }
 
+// Format number
+const NUMBER_FROMATTER = new Intl.NumberFormat('en-UK');
+
+export function formatNumber(number: number) {
+  return NUMBER_FROMATTER.format(number);
+}
+
 // Shorten UUID
 export function formatId(id: string) {
   return `..${id.substring(id.length - 6)}`;
