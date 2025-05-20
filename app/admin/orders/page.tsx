@@ -14,6 +14,7 @@ import Pagination from '@/components/shared/pagination';
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import DeleteDialog from '@/components/shared/delete-dialog';
+import { requireAdmin } from '@/lib/auth-guard';
 
 export const metadata: Metadata = {
   title: 'Admin Orders',
@@ -22,6 +23,8 @@ export const metadata: Metadata = {
 const AdminOrderPage = async (props: {
   searchParams: Promise<{ page: string }>;
 }) => {
+  await requireAdmin();
+
   const { page = '1' } = await props.searchParams;
 
   const session = await auth();
