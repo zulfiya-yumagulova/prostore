@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import { getMyOrders } from '@/lib/actions/order.actions';
 import { formatCurrency, formatDateTime, formatId } from '@/lib/utils';
 import Link from 'next/link';
@@ -12,9 +11,6 @@ import {
 } from '@/components/ui/table';
 import Pagination from '@/components/shared/pagination';
 
-export const metada: Metadata = {
-  title: 'My orders',
-};
 const OrdersPage = async (props: {
   searchParams: Promise<{ page: string }>;
 }) => {
