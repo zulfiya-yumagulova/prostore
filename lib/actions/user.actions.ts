@@ -13,6 +13,8 @@ import { prisma } from '@/db/prisma';
 import { formatError } from '../utils';
 import { ShippingAddress } from '@/types';
 import { z } from 'zod';
+import { PAGE_SIZE } from '../constans';
+import { revalidatePath } from 'next/cache';
 
 // Sign in the user with credentials
 export async function signInWithCredentials(
@@ -172,5 +174,48 @@ export async function updateProfile(user: { name: string; email: string }) {
     return { success: true, message: 'User updated successfully!' };
   } catch (error) {
     return { success: false, message: formatError(error) };
+  }
+}
+
+// Get all the users
+export async function getAllUsers({
+  limit = PAGE_SIZE,
+  page,
+}: {
+  limit?: number;
+  page: number;
+}) {
+  const users = await prisma.user.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    skip: (page - 1) * limit,
+  });
+
+  const usersCount = await prisma.user.count();
+
+  return {
+    users,
+    totalPages: Math.ceil(usersCount / limit),
+  };
+}
+
+// Delete the user
+export async function deleteUser(id: string) {
+  try {
+    await prisma.user.delete({
+      where: { id },
+    });
+
+    revalidatePath('/admin/users');
+
+    return {
+      success: true,
+      message: 'User deleted successfully',
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: formatError(error),
+    };
   }
 }
