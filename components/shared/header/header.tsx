@@ -3,13 +3,15 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { APP_NAME } from '@/lib/constans';
 import Menu from './menu';
+import CategoryDraw from './category-draw';
 
 function Header() {
   return (
     <header className="w-full border">
       <div className="wrapper flex-between">
         <div className="flex-start">
-          <Link href="/" className="flex-start">
+          <CategoryDraw />
+          <Link href="/" className="flex-start ml-4">
             <Image
               src="/images/logo.svg"
               alt={`${APP_NAME} logo`}
