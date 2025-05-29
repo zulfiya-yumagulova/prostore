@@ -24,11 +24,27 @@ export async function generateMetadata(props: {
     price = 'all',
     rating = 'all',
   } = await props.searchParams;
-  return {
-    title: 'Search',
-  };
-}
 
+  const isQuerySet = q && q !== 'all' && q.trim() !== '';
+  const isCategorySet =
+    category && category !== 'all' && category.trim() !== '';
+  const isPriceSet = price && price !== 'all' && price.trim() !== '';
+  const isRatingSet = rating && rating !== 'all' && rating.trim() !== '';
+
+  if (isQuerySet || isCategorySet || isPriceSet || isRatingSet) {
+    return {
+      title: `
+      Search ${isQuerySet ? q : ''} 
+      ${isCategorySet ? `: Category ${category}` : ''}
+      ${isPriceSet ? `: Price ${price}` : ''}
+      ${isRatingSet ? `: Rating ${rating}` : ''}`,
+    };
+  } else {
+    return {
+      title: 'Search Products',
+    };
+  }
+}
 const SearchPage = async (props: {
   searchParams: Promise<{
     q?: string;
