@@ -8,6 +8,8 @@ import Link from 'next/link';
 
 const ratings = [4, 3, 2, 1];
 
+const sortOrders = ['newest', 'lowest', 'highest', 'rating'];
+
 const SearchPage = async (props: {
   searchParams: Promise<{
     q?: string;
@@ -176,16 +178,12 @@ const SearchPage = async (props: {
       </div>
 
       <div className="md:col-span-4 space-y-4">
-        <div className="flex-between flex-col my-4 md:flex-row">
+        <div className="flex-between flex-col md:flex-row my-4">
           <div className="flex items-center">
-            {'  ' + q !== 'all' && q !== '' && 'Sorted by ' + q}
-            {'  ' + category !== 'all' &&
-              category !== '' &&
-              ' Sorted by ' + category}
-            {'  ' + price !== 'all' && price !== '' && ' Sorted by ' + price}
-            {'  ' + rating !== 'all' &&
-              rating !== '' &&
-              ' Sorted by ' + rating + ' & up stars'}
+            {q !== 'all' && q !== '' && 'Query: ' + q}
+            {category !== 'all' && category !== '' && 'Category: ' + category}
+            {price !== 'all' && ' Price: ' + price}
+            {rating !== 'all' && ' Rating: ' + rating + ' stars & up'}
             &nbsp;
             {(q !== 'all' && q !== '') ||
             (category !== 'all' && category !== '') ||
@@ -195,6 +193,20 @@ const SearchPage = async (props: {
                 <Link href="/search">Clear</Link>
               </Button>
             ) : null}
+          </div>
+
+          {/* Sort */}
+          <div>
+            Sort by{' '}
+            {sortOrders.map((s) => (
+              <Link
+                href={getFilterUrl({ s })}
+                key={s}
+                className={`mx-2 ${sort === s && 'font-bold'}`}
+              >
+                {s}
+              </Link>
+            ))}
           </div>
         </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
