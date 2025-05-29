@@ -1,9 +1,12 @@
 import ProductCard from '@/components/shared/product/product-card';
+import { Button } from '@/components/ui/button';
 import {
   getAllProducts,
   getAllCategories,
 } from '@/lib/actions/product.actions';
 import Link from 'next/link';
+
+const ratings = [4, 3, 2, 1];
 
 const SearchPage = async (props: {
   searchParams: Promise<{
@@ -146,8 +149,54 @@ const SearchPage = async (props: {
             ))}
           </ul>
         </div>
+        {/* Rating links */}
+        <div className="text-xl mb-2 mt-3">Rating</div>
+        <div>
+          <ul className="space-y-1">
+            <li>
+              <Link
+                className={`${rating === 'all' && 'font-bold'}`}
+                href={getFilterUrl({ c: 'all' })}
+              >
+                All
+              </Link>
+            </li>
+            {ratings.map((r) => (
+              <li key={r}>
+                <Link
+                  className={`${rating === r.toString() && 'font-bold'}`}
+                  href={getFilterUrl({ r: `${r}` })}
+                >
+                  {`${r} stars & up`}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
+
       <div className="md:col-span-4 space-y-4">
+        <div className="flex-between flex-col my-4 md:flex-row">
+          <div className="flex items-center">
+            {'  ' + q !== 'all' && q !== '' && 'Sorted by ' + q}
+            {'  ' + category !== 'all' &&
+              category !== '' &&
+              ' Sorted by ' + category}
+            {'  ' + price !== 'all' && price !== '' && ' Sorted by ' + price}
+            {'  ' + rating !== 'all' &&
+              rating !== '' &&
+              ' Sorted by ' + rating + ' & up stars'}
+            &nbsp;
+            {(q !== 'all' && q !== '') ||
+            (category !== 'all' && category !== '') ||
+            rating !== 'all' ||
+            price !== 'all' ? (
+              <Button variant={'link'} asChild>
+                <Link href="/search">Clear</Link>
+              </Button>
+            ) : null}
+          </div>
+        </div>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {products.data.length === 0 && <div>No products found</div>}
           {products.data.map((product) => (
