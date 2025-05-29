@@ -10,6 +10,25 @@ const ratings = [4, 3, 2, 1];
 
 const sortOrders = ['newest', 'lowest', 'highest', 'rating'];
 
+export async function generateMetadata(props: {
+  searchParams: Promise<{
+    q: string;
+    category: string;
+    price: string;
+    rating: string;
+  }>;
+}) {
+  const {
+    q = 'all',
+    category = 'all',
+    price = 'all',
+    rating = 'all',
+  } = await props.searchParams;
+  return {
+    title: 'Search',
+  };
+}
+
 const SearchPage = async (props: {
   searchParams: Promise<{
     q?: string;
@@ -180,8 +199,8 @@ const SearchPage = async (props: {
       <div className="md:col-span-4 space-y-4">
         <div className="flex-between flex-col md:flex-row my-4">
           <div className="flex items-center">
-            {q !== 'all' && q !== '' && 'Query: ' + q}
-            {category !== 'all' && category !== '' && 'Category: ' + category}
+            {q !== 'all' && q !== '' && ' Sorted by: ' + q}
+            {category !== 'all' && category !== '' && ' Category: ' + category}
             {price !== 'all' && ' Price: ' + price}
             {rating !== 'all' && ' Rating: ' + rating + ' stars & up'}
             &nbsp;
