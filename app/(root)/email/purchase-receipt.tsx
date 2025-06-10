@@ -1,3 +1,4 @@
+import dummyData from '@/db/dummy-data';
 import { formatCurrency } from '@/lib/utils';
 import { Order } from '@/types';
 import {
@@ -14,10 +15,59 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const dateFormatter = new Intl.DateTimeFormat('en', { dateStyle: 'medium' });
 
-const PurchaseReceiptEmail = ({ order }: { order: Order }) => {
+type OrderInformationProps = {
+  order: Order;
+};
+
+PurchaseReceiptEmail.PreviewProps = {
+  order: {
+    id: crypto.randomUUID(),
+    userId: '123',
+    user: {
+      name: 'John Doe',
+      email: 'test@test.com',
+    },
+    paymentMethod: 'Stripe',
+    shippingAddress: {
+      fullName: 'John Doe',
+      streetAddress: '123 Main st',
+      city: 'New York',
+      postCode: '10001',
+      country: 'US',
+    },
+    createdAt: new Date(),
+    totalPrice: '100',
+    taxPrice: '10',
+    shippingPrice: '10',
+    itemsPrice: '80',
+    orderItem: dummyData.products.map((x) => ({
+      name: x.name,
+      orderId: '123',
+      productId: '123',
+      slug: x.slug,
+      qty: x.stock,
+      image: x.images[0],
+      price: x.price.toString(),
+    })),
+    isDelivered: true,
+    delivereddAt: new Date(),
+    isPaid: true,
+    paidAt: new Date(),
+    paymentResult: {
+      id: '123',
+      status: 'succeeded',
+      pricePaid: '100',
+      email_address: 'test@test.com',
+    },
+  },
+} satisfies OrderInformationProps;
+
+export default function PurchaseReceiptEmail({ order }: { order: Order }) {
   return (
     <Html>
       <Preview>View order receipt</Preview>
@@ -94,6 +144,4 @@ const PurchaseReceiptEmail = ({ order }: { order: Order }) => {
       </Tailwind>
     </Html>
   );
-};
-
-export default PurchaseReceiptEmail;
+}
